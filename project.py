@@ -1,5 +1,9 @@
 import pandas as pd
 
 
-def unique_breaches(data: pd.DataFrame) -> int:
+def prc_unique_breaches(data: pd.DataFrame) -> list[str]:
     return data["Type of breach"].unique()
+
+
+def vin_unique_breaches(data: pd.DataFrame) -> list[str]:
+    return data["Type_of_Breach"].unique()
