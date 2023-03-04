@@ -22,6 +22,7 @@ def main():
     # test_unique_breaches(priv_rights_data)
     # test_vin_unique_breaches(vincent_data)
     test_split_dates(test_data)
+    # print(cleanup.apply_split(test_data))
 
 
 if __name__ == '__main__':
