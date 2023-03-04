@@ -1,13 +1,13 @@
-import project
+import cleanup
 import pandas as pd
 
 
 def test_unique_breaches(data: pd.DataFrame) -> list[str]:
-    print(project.prc_unique_breaches(data))
+    print(cleanup.prc_unique_breaches(data))
 
 
 def test_vin_unique_breaches(data: pd.DataFrame) -> list[str]:
-    print(project.vin_unique_breaches(data))
+    print(cleanup.vin_unique_breaches(data))
 
 
 def main():
