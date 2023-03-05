@@ -1,3 +1,4 @@
+import cleanup
 import plotly.express as px
 import pandas as pd
 
@@ -13,8 +14,13 @@ def plot_average_response(data: pd.DataFrame) -> None:
 
 
 def plot_most_common_entity(data: pd.DataFrame) -> None:
-    # bar or pie
-    return data["Location_of_Breached_Information"].unique()
+    # horizontal bar plot
+    entity_dict = cleanup.clean_entities(data)
+    print(entity_dict)
+    x_y = {'type': entity_dict.keys(),
+           'values': entity_dict.values()}
+    fig = px.bar(x_y, x='type', y='values', orientation='h')
+    fig.show()
 
 
 def plot_breach_types(data: pd.DataFrame) -> None:

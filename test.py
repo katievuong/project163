@@ -26,6 +26,7 @@ def main():
     # print(cleanup.apply_split(test_data))
     # print(plots.plot_most_common_entity(vincent_data))
     print(cleanup.clean_entities(vincent_data))
+    # plots.plot_most_common_entity(vincent_data)
 
 
 if __name__ == '__main__':

@@ -60,9 +60,15 @@ def apply_split(data: pd.DataFrame) -> None:
     pass
 
 
-def apply_clean_entities(s) -> list[str]:
-    return s.split(",")
-
-
 def clean_entities(data: pd.DataFrame) -> None:
-    return data["Location_of_Breached_Information"].apply(apply_clean_entities)
+    unique = {}
+    data["Location_of_Breached_Information"] = (data[
+                        "Location_of_Breached_Information"].str.split(","))
+    for i in data["Location_of_Breached_Information"]:
+        for j in i:
+            j = j.strip()
+            if j not in unique:
+                unique[j] = 1
+            else:
+                unique[j] += 1
+    return unique
