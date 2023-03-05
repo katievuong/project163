@@ -20,25 +20,36 @@ def split_dates(data: pd.DataFrame) -> None:
         thirty_one = ["01", "03", "05", "07", "08", "10", "12"]
         leap = ["2004", "2008", "2012", "2016"]
         print(d, b)
+        # handles days index in date list
         if b[1] in thirty_one:
             result[2] = 31 - int(b[2])
         elif b[1] in thirty:
-            result[2] = 30 - int(b[2])
+            result[2] = 31 - int(b[2])
         elif b[0] in leap:
             result[2] = 29 - int(b[2])
         else:
             result[2] = 28 - int(b[2])
         result[2] += int(d[2])
 
-        if result[2] >= 30:
-            result[2] - 31
+        # handles months index
+        if result[2] >= 31:
+            result[2] -= 31
         if int(b[1]) > int(d[1]):
             result[1] = 12 - (int(b[1]) - int(d[1]))
-        else:
+        elif int(d[1]) - int(b[1]) != 1:
             result[1] = int(d[1]) - int(b[1])
-        result[0] = 1 - (int(d[0]) - int(b[0]))
-        # result[2] += (int(d[2]) - 1)
 
+        # handles years
+        if int(d[0]) - int(b[0]) > 1:
+            result[0] = int(d[0]) - int(b[0]) - 1
+        elif int(d[0]) > int(b[0]) and int(d[1]) > int(b[1]):
+            result[0] = int(d[0]) - int(b[0]) - 1
+        elif int(d[0]) > int(b[0]) and (int(d[1]) == int(b[1]) and
+                                        int(d[2]) >= int(b[2])):
+            result[0] = int(d[0]) - int(b[0]) - 1
+        elif int(d[0]) == int(b[0]) and (int(d[1]) == int(b[1]) and
+                                         int(d[2]) >= int(b[2])):
+            result[0] = int(d[0]) - int(b[0]) - 1
         data["response_time"] = pd.Series(result)
     return result
 
