@@ -1,5 +1,6 @@
 import cleanup
 import pandas as pd
+import plots
 
 
 def test_unique_breaches(data: pd.DataFrame) -> list[str]:
@@ -16,13 +17,15 @@ def test_split_dates(data: pd.DataFrame) -> pd.DataFrame:
 
 def main():
     # priv_rights_data = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
-    # vincent_data = pd.read_csv("breaches.csv")
+    vincent_data = pd.read_csv("breaches.csv")
     test_data = pd.read_csv("test.csv")
 
     # test_unique_breaches(priv_rights_data)
     # test_vin_unique_breaches(vincent_data)
     test_split_dates(test_data)
     # print(cleanup.apply_split(test_data))
+    # print(plots.plot_most_common_entity(vincent_data))
+    print(cleanup.clean_entities(vincent_data))
 
 
 if __name__ == '__main__':

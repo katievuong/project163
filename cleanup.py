@@ -58,3 +58,11 @@ def apply_split(data: pd.DataFrame) -> None:
     data["response_time"] = data["response_time"].apply(split_dates(data))
     # return data["response_time"]
     pass
+
+
+def apply_clean_entities(s) -> list[str]:
+    return s.split(",")
+
+
+def clean_entities(data: pd.DataFrame) -> None:
+    return data["Location_of_Breached_Information"].apply(apply_clean_entities)

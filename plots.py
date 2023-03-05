@@ -14,7 +14,7 @@ def plot_average_response(data: pd.DataFrame) -> None:
 
 def plot_most_common_entity(data: pd.DataFrame) -> None:
     # bar or pie
-    pass
+    return data["Location_of_Breached_Information"].unique()
 
 
 def plot_breach_types(data: pd.DataFrame) -> None:
