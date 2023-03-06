@@ -19,7 +19,9 @@ def plot_most_common_entity(data: pd.DataFrame) -> None:
     print(entity_dict)
     x_y = {'type': entity_dict.keys(),
            'values': entity_dict.values()}
-    fig = px.bar(x_y, x='type', y='values', orientation='h')
+    fig = px.bar(x_y, x='values', y='type', orientation='h')
+    fig.update_layout(barmode='stack',
+                      yaxis={'categoryorder': 'total ascending'})
     fig.show()
 
 

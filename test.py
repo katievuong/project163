@@ -22,11 +22,10 @@ def main():
 
     # test_unique_breaches(priv_rights_data)
     # test_vin_unique_breaches(vincent_data)
-    test_split_dates(test_data)
+    # test_split_dates(test_data)
     # print(cleanup.apply_split(test_data))
-    # print(plots.plot_most_common_entity(vincent_data))
     print(cleanup.clean_entities(vincent_data))
-    # plots.plot_most_common_entity(vincent_data)
+    plots.plot_most_common_entity(vincent_data)
 
 
 if __name__ == '__main__':

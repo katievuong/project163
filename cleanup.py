@@ -55,16 +55,14 @@ def split_dates(data: pd.DataFrame) -> None:
 
 
 def apply_split(data: pd.DataFrame) -> None:
-    data["response_time"] = data["response_time"].apply(split_dates(data))
-    # return data["response_time"]
-    pass
+    data["response_time"].apply(split_dates(data))
+    return data["response_time"]
 
 
 def clean_entities(data: pd.DataFrame) -> None:
     unique = {}
-    data["Location_of_Breached_Information"] = (data[
-                        "Location_of_Breached_Information"].str.split(","))
-    for i in data["Location_of_Breached_Information"]:
+    breach_info = (data["Location_of_Breached_Information"].str.split(","))
+    for i in breach_info:
         for j in i:
             j = j.strip()
             if j not in unique:
