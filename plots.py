@@ -71,9 +71,13 @@ def breach_individual_correlation(data: pd.DataFrame) -> None:
 
 def plot_average_response(data: pd.DataFrame) -> None:
     average = data.groupby('year')['response_date'].mean()
-    # fig = px.line(data, x='year', y='response_date', title='Average Response Rate 2002-2014')
+    # fig = px.box(data, x='year', y='response_date', title=
+    #           # 'Average Response Rate 2002-2014')
     fig = average.plot(template="simple_white", labels=dict(
-                       index="Year", value="Response Rate"))
+                       index="Year", value="Response Rate (Months)"))
+    fig.update_layout(
+        title='Average Response Rate From Breach Start Date 2002-2014',
+                )
     fig.show()
     # return average
 
@@ -81,12 +85,13 @@ def plot_average_response(data: pd.DataFrame) -> None:
 def plot_most_common_entity(data: pd.DataFrame) -> None:
     # horizontal bar plot
     entity_dict = cleanup.clean_entities(data)
-    print(entity_dict)
     x_y = {'Type': entity_dict.keys(),
            'Values': entity_dict.values()}
     fig = px.bar(x_y, x='Values', y='Type', orientation='h')
-    fig.update_layout(barmode='stack',
-                      yaxis={'categoryorder': 'total ascending'})
+    fig.update_layout(
+        title='Amount of Breached Information According to Location',
+        barmode='stack', yaxis={'categoryorder':
+                                'total ascending'})
     fig.show()
 
 
