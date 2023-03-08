@@ -48,6 +48,26 @@ def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
     fig.show()
 
 
+def breach_individual_correlation(data: pd.DataFrame) -> None:
+    # split the categories that are combined with a comma
+    data['Type_of_Breach'] = data['Type_of_Breach'].str.split(', ')
+
+    # create a new data frame with one row for each type of breach
+    df = pd.DataFrame(data['Type_of_Breach'].explode().value_counts())
+    df.reset_index(inplace=True)
+    df.columns = ['Type_of_Breach', 'Count']
+
+    # remove leading/trailing whitespaces from the breach types
+    df['Type_of_Breach'] = df['Type_of_Breach'].astype(str).str.strip()
+
+    # create a bar chart
+    fig = px.bar(df, x='Type_of_Breach', y='Count', color='Type_of_Breach',
+                 title='Number of Individuals Affected by Type of Breach')
+    fig.update_layout(xaxis_title='Type of Breach',
+                      yaxis_title='Number of Individuals Affected')
+    fig.show()
+
+
 def plot_average_response(data: pd.DataFrame) -> None:
     pass
 
@@ -74,6 +94,7 @@ def main():
     df1 = pd.read_csv("breaches.csv")
     df2 = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
     plot_breaches_per_year(df1, df2)
+    breach_individual_correlation(df1)
 
 
 if __name__ == '__main__':
