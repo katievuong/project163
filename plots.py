@@ -90,12 +90,6 @@ def plot_most_common_entity(data: pd.DataFrame) -> None:
     fig.show()
 
 
-def plot_breach_types(data: pd.DataFrame) -> None:
-    # fig = px.pie(data, values="", names="", title="")
-    # fig.show()
-    pass
-
-
 def main():
     df1 = pd.read_csv("breaches.csv")
     df2 = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
