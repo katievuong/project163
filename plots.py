@@ -5,6 +5,7 @@ import pandas as pd
 pd.options.plotting.backend = "plotly"
 
 
+# research question 1
 def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
     # filter data by year
     data1 = data1[data1['year'].between(2009, 2017)]
@@ -49,6 +50,34 @@ def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
     fig.show()
 
 
+# research question 3
+def plot_average_response(data: pd.DataFrame) -> None:
+    average = data.groupby('year')['response_date'].mean()
+    # fig = px.box(data, x='year', y='response_date', title=
+    #           # 'Average Response Rate 2002-2014')
+    fig = average.plot(template="simple_white", labels=dict(
+                       index="Year", value="Response Rate (Months)"))
+    fig.update_layout(
+        title='Average Response Rate From Breach Start Date 2002-2014',
+                )
+    fig.show()
+
+
+# research question 4
+def plot_most_common_entity(data: pd.DataFrame) -> None:
+    # horizontal bar plot
+    entity_dict = cleanup.clean_entities(data)
+    x_y = {'Type': entity_dict.keys(),
+           'Values': entity_dict.values()}
+    fig = px.bar(x_y, x='Values', y='Type', orientation='h')
+    fig.update_layout(
+        title='Amount of Breached Information According to Location',
+        barmode='stack', yaxis={'categoryorder':
+                                'total ascending'})
+    fig.show()
+
+
+# research question 5
 def breach_individual_correlation(data: pd.DataFrame) -> None:
     # split the categories that are combined with a comma
     data['Type_of_Breach'] = data['Type_of_Breach'].str.split(', ')
@@ -66,32 +95,6 @@ def breach_individual_correlation(data: pd.DataFrame) -> None:
                  title='Number of Individuals Affected by Type of Breach')
     fig.update_layout(xaxis_title='Type of Breach',
                       yaxis_title='Number of Individuals Affected')
-    fig.show()
-
-
-def plot_average_response(data: pd.DataFrame) -> None:
-    average = data.groupby('year')['response_date'].mean()
-    # fig = px.box(data, x='year', y='response_date', title=
-    #           # 'Average Response Rate 2002-2014')
-    fig = average.plot(template="simple_white", labels=dict(
-                       index="Year", value="Response Rate (Months)"))
-    fig.update_layout(
-        title='Average Response Rate From Breach Start Date 2002-2014',
-                )
-    fig.show()
-    # return average
-
-
-def plot_most_common_entity(data: pd.DataFrame) -> None:
-    # horizontal bar plot
-    entity_dict = cleanup.clean_entities(data)
-    x_y = {'Type': entity_dict.keys(),
-           'Values': entity_dict.values()}
-    fig = px.bar(x_y, x='Values', y='Type', orientation='h')
-    fig.update_layout(
-        title='Amount of Breached Information According to Location',
-        barmode='stack', yaxis={'categoryorder':
-                                'total ascending'})
     fig.show()
 
 
