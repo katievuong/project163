@@ -2,6 +2,7 @@ import cleanup
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
+pd.options.plotting.backend = "plotly"
 
 
 def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
@@ -69,7 +70,12 @@ def breach_individual_correlation(data: pd.DataFrame) -> None:
 
 
 def plot_average_response(data: pd.DataFrame) -> None:
-    pass
+    average = data.groupby('year')['response_date'].mean()
+    # fig = px.line(data, x='year', y='response_date', title='Average Response Rate 2002-2014')
+    fig = average.plot(template="simple_white", labels=dict(
+                       index="Year", value="Response Rate"))
+    fig.show()
+    # return average
 
 
 def plot_most_common_entity(data: pd.DataFrame) -> None:
