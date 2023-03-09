@@ -54,10 +54,16 @@ def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
 def average_number_affected(data: pd.DataFrame) -> None:
     df = data.copy()
     df['Individuals_Affected'] = df['Individuals_Affected'].astype(float)
-    df = df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
+    print(df)
+    df = (
+     df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
+         )
     # Create a histogram plot
-    fig = px.histogram(df, x='Type_of_Breach', y='Individuals_Affected', color='Type_of_Breach',
-                       title='Average Number of Individuals Affected by Type of Breach')
+    fig = px.histogram(
+        df, x='Type_of_Breach', y='Individuals_Affected',
+        color='Type_of_Breach',
+        title='Average Number of Individuals Affected by Type of Breach'
+                      )
     fig.update_layout(xaxis_title='Type of Breach',
                       yaxis_title='Average Number of Individuals Affected')
     fig.show()
@@ -78,15 +84,14 @@ def plot_average_response(data: pd.DataFrame) -> None:
 
 # research question 4
 def plot_most_common_entity(data: pd.DataFrame) -> None:
-    # horizontal bar plot
+    # pie chart
     entity_dict = cleanup.clean_entities(data)
     x_y = {'Type': entity_dict.keys(),
            'Values': entity_dict.values()}
-    fig = px.bar(x_y, x='Values', y='Type', orientation='h')
-    fig.update_layout(
-        title='Amount of Breached Information According to Location',
-        barmode='stack', yaxis={'categoryorder':
-                                'total ascending'})
+    fig = px.pie(x_y, values='Values', names='Type',
+                 title='Amount of Breached Information According to Location',
+                 color_discrete_sequence=px.colors.sequential.RdBu)
+    fig.update_traces(textposition='inside', textinfo='label')
     fig.show()
 
 
@@ -105,7 +110,8 @@ def breach_individual_correlation(data: pd.DataFrame) -> None:
 
     # create a bar chart
     fig = px.bar(df, x='Type_of_Breach', y='Count', color='Type_of_Breach',
-                 title='Number of Individuals Affected by Type of Breach')
+                 title='Number of Individuals Affected by Type of Breach',
+                 )
     fig.update_layout(xaxis_title='Type of Breach',
                       yaxis_title='Number of Individuals Affected')
     fig.show()
@@ -142,8 +148,8 @@ def main():
     df1 = pd.read_csv("breaches.csv")
     df2 = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
     plot_breaches_per_year(df1, df2)
-    breach_individual_correlation(df1)
     average_number_affected(df1)
+    breach_individual_correlation(df1)
     region_map_affected(df1, df2)
 
 
