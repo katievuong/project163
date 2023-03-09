@@ -149,6 +149,8 @@ def main():
     df2 = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
     plot_breaches_per_year(df1, df2)
     average_number_affected(df1)
+    plot_most_common_entity(df1)
+    plot_average_response(cleanup.clean_dates(df1))
     breach_individual_correlation(df1)
     region_map_affected(df1, df2)
 
