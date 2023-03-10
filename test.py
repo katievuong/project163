@@ -1,7 +1,9 @@
 '''
 Tyrell Garza, Kevin Fu, Katie Vuong
 Data Breach Analysis: Investigating Trends and Impact on Businesses
-
+Testing file imports cleanup.py and cse163_utils.py
+for validating accuracy in results and calculations
+drawing from test.py's smaller data
 '''
 import cleanup
 import pandas as pd
@@ -35,21 +37,31 @@ def test_breach_trend(data: pd.DataFrame) -> None:
     assert latest == 2
 
 
+# research question 3 tests
+def test_average_response(data: pd.DataFrame) -> None:
+    '''
+    Tests cleanup.py's clean_dates function, ensures correct
+    time passed between two dates calculations, returns None
+    '''
+    assert_equals(float(16), cleanup.clean_dates(data).loc[1, 'response_time'])
+
+
+# research question 4 tests
 def test_unique_loc(data: pd.DataFrame) -> None:
+    '''
+    Tests cleanup.py's clean_entities function, ensures correct
+    amount of unique locations, returns None
+    '''
     assert_equals(6, len(cleanup.clean_entities(data)))
     assert_equals(1, cleanup.clean_entities(data)['E-mail'])
     assert_equals(9, sum(cleanup.clean_entities(data).values()))
-
-
-def test_average_response(data: pd.DataFrame) -> None:
-    assert_equals(float(16), cleanup.clean_dates(data).loc[1, 'response_time'])
 
 
 # research question 5 tests
 def test_split_by_comma(data: pd.DataFrame) -> None:
     '''
 
-    Tests the split_by_comma function. Returns a 
+    Tests the split_by_comma function. Returns a
     dataframe with 7 rows, where 'Type of Breach'
     column contains correct values after splitting
     by comma.

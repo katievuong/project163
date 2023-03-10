@@ -1,7 +1,8 @@
 '''
 Tyrell Garza, Kevin Fu, Katie Vuong
 Data Breach Analysis: Investigating Trends and Impact on Businesses
-
+Plotting file for outputting data visualizations drawing from both
+breaches.csv and PRC Data Breach Chronology - 1.13.20.csv
 '''
 import cleanup
 import plotly.express as px
@@ -80,6 +81,11 @@ def average_number_affected(data: pd.DataFrame) -> None:
 
 # research question 3
 def plot_average_response(data: pd.DataFrame) -> None:
+    '''
+    Parameter: data - pandas dataframe
+    Outputs a line graph that shows trend in data breach response rate based
+    on the average time passed in months from 2002-2014, returns None
+    '''
     # Line graph
     average = data.groupby('year')['response_time'].mean()
     fig = average.plot(template="simple_white", labels=dict(
@@ -92,6 +98,11 @@ def plot_average_response(data: pd.DataFrame) -> None:
 
 # research question 4
 def plot_most_common_entity(data: pd.DataFrame) -> None:
+    '''
+    Parameter: data - pandas dataframe
+    Outputs a pie chart that displays different locations of breached
+    information and the counts with a legend, returns None
+    '''
     # Pie chart
     entity_dict = cleanup.clean_entities(data)
     x_y = {'Type': entity_dict.keys(),
