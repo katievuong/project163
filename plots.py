@@ -12,6 +12,11 @@ pd.options.plotting.backend = "plotly"
 
 # research question 1
 def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
+    '''
+
+    Takes two dataframes, handles data in both to create two
+    lines on one plot using plotly.
+    '''
     # filter data by year
     data1 = data1[data1['year'].between(2009, 2017)]
     data2 = data2[data2['Year of Breach'].between(2009, 2017)]
@@ -100,6 +105,12 @@ def plot_most_common_entity(data: pd.DataFrame) -> None:
 
 # research question 5
 def breach_individual_correlation(data: pd.DataFrame) -> None:
+    '''
+
+    Takes in breaches.csv dataframe and uses plotly to
+    create a bar graph showing number of individuals
+    affected by each type of breach. Uses plotly.
+    '''
     # split the categories that are combined with a comma
     data['Type_of_Breach'] = data['Type_of_Breach'].str.split(', ')
 
