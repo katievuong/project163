@@ -1,3 +1,8 @@
+'''
+Tyrell Garza, Kevin Fu, Katie Vuong
+Data Breach Analysis: Investigating Trends and Impact on Businesses
+
+'''
 import cleanup
 import plotly.express as px
 import plotly.graph_objects as go
@@ -54,7 +59,6 @@ def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
 def average_number_affected(data: pd.DataFrame) -> None:
     df = data.copy()
     df['Individuals_Affected'] = df['Individuals_Affected'].astype(float)
-    print(df)
     df = (
      df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
          )
@@ -71,20 +75,19 @@ def average_number_affected(data: pd.DataFrame) -> None:
 
 # research question 3
 def plot_average_response(data: pd.DataFrame) -> None:
-    average = data.groupby('year')['response_date'].mean()
-    # fig = px.box(data, x='year', y='response_date', title=
-    #           # 'Average Response Rate 2002-2014')
+    # Line graph
+    average = data.groupby('year')['response_time'].mean()
     fig = average.plot(template="simple_white", labels=dict(
                        index="Year", value="Response Rate (Months)"))
     fig.update_layout(
         title='Average Response Rate From Breach Start Date 2002-2014',
-                )
+                     )
     fig.show()
 
 
 # research question 4
 def plot_most_common_entity(data: pd.DataFrame) -> None:
-    # pie chart
+    # Pie chart
     entity_dict = cleanup.clean_entities(data)
     x_y = {'Type': entity_dict.keys(),
            'Values': entity_dict.values()}
