@@ -43,7 +43,17 @@ def test_average_response(data: pd.DataFrame) -> None:
     Tests cleanup.py's clean_dates function, ensures correct
     time passed between two dates calculations, returns None
     '''
-    assert_equals(float(16), cleanup.clean_dates(data).loc[1, 'response_time'])
+    end1 = cleanup.clean_dates(data).loc[4, "Date_Posted_or_Updated"].split('/'
+                                                                            )
+    start1 = cleanup.clean_dates(data).loc[4, "breach_start"].split('/')
+    months1 = int(end1[1]) - int(start1[1])
+    days1 = (int(end1[2]) - int(start1[2])) / (365.25 / 12)
+    test1 = (months1 + days1)
+    assert_equals(test1, cleanup.clean_dates(data).loc[4, 'response_time'])
+    assert_equals(51 + (11/(365.25 / 12)),
+                  cleanup.clean_dates(data).loc[0, 'response_time'])
+    assert_equals(
+        19/(365.25 / 12), cleanup.clean_dates(data).loc[5, 'response_time'])
 
 
 # research question 4 tests

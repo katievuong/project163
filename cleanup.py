@@ -67,7 +67,7 @@ def clean_dates(data: pd.DataFrame) -> pd.DataFrame:
 
         # Create relativedelta object to calculate exact time passed
         delta = relativedelta.relativedelta(end, start)
-        print(delta.months + (delta.years * 12) + (delta.days / average_days))
+
         response_date.append(delta.months + (delta.years * 12) +
                                             (delta.days / average_days))
     data["response_time"] = pd.Series(response_date)

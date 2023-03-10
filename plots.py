@@ -66,13 +66,18 @@ def average_number_affected(data: pd.DataFrame) -> None:
     df = data.copy()
     df['Type_of_Breach'] = df['Type_of_Breach'].apply(lambda x: x.split(', '))
     df = df.explode('Type_of_Breach')
-    df = df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
+    df = df.groupby(
+        'Type_of_Breach')['Individuals_Affected'].mean().reset_index()
     df['Type_of_Breach'] = df['Type_of_Breach'].astype(str).str.strip()
     # Create a histogram plot
-    new_df = pd.DataFrame({'Type_of_Breach': df['Type_of_Breach'].explode(),
-                           'Individuals_Affected': df['Individuals_Affected'].repeat(df['Type_of_Breach'].str.len())})
-    fig = px.histogram(new_df, x='Type_of_Breach', y='Individuals_Affected', color='Type_of_Breach',
-                       title='Average Number of Individuals Affected by Type of Breach')
+    new_df = pd.DataFrame(
+        {'Type_of_Breach': df['Type_of_Breach'].explode(),
+         'Individuals_Affected':
+         (df['Individuals_Affected'].repeat(df['Type_of_Breach'].str.len()))})
+    fig = px.histogram(
+        new_df, x='Type_of_Breach', y='Individuals_Affected',
+        color='Type_of_Breach',
+        title='Average Number of Individuals Affected by Type of Breach')
     fig.update_layout(xaxis_title='Type of Breach',
                       yaxis_title='Average Number of Individuals Affected',
                       xaxis_tickfont=dict(size=11))
@@ -89,7 +94,7 @@ def plot_average_response(data: pd.DataFrame) -> None:
     '''
     # Line graph
     average = data.groupby('year')['response_time'].mean()
-    fig = average.plot(template="simple_white", labels=dict(
+    fig = average.plot(template="plotly_white", labels=dict(
                        index="Year", value="Response Rate (Months)"))
     fig.update_layout(
         title='Average Response Rate From Breach Start Date 2002-2014',
@@ -136,8 +141,7 @@ def breach_individual_correlation(data: pd.DataFrame) -> None:
 
     # create a bar chart
     fig = px.bar(df, x='Type_of_Breach', y='Count', color='Type_of_Breach',
-                 title='Number of Individuals Affected by Type of Breach',
-                 )
+                 title='Number of Individuals Affected by Type of Breach')
     fig.update_layout(xaxis_title='Type of Breach',
                       yaxis_title='Number of Individuals Affected')
     fig.show()
