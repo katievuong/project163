@@ -64,18 +64,19 @@ def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
 # research question 2
 def average_number_affected(data: pd.DataFrame) -> None:
     df = data.copy()
-    df['Individuals_Affected'] = df['Individuals_Affected'].astype(float)
-    df = (
-     df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
-         )
+    df['Type_of_Breach'] = df['Type_of_Breach'].apply(lambda x: x.split(', '))
+    df = df.explode('Type_of_Breach')
+    df = df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
+    df['Type_of_Breach'] = df['Type_of_Breach'].astype(str).str.strip()
     # Create a histogram plot
-    fig = px.histogram(
-        df, x='Type_of_Breach', y='Individuals_Affected',
-        color='Type_of_Breach',
-        title='Average Number of Individuals Affected by Type of Breach'
-                      )
+    new_df = pd.DataFrame({'Type_of_Breach': df['Type_of_Breach'].explode(),
+                           'Individuals_Affected': df['Individuals_Affected'].repeat(df['Type_of_Breach'].str.len())})
+    fig = px.histogram(new_df, x='Type_of_Breach', y='Individuals_Affected', color='Type_of_Breach',
+                       title='Average Number of Individuals Affected by Type of Breach')
     fig.update_layout(xaxis_title='Type of Breach',
-                      yaxis_title='Average Number of Individuals Affected')
+                      yaxis_title='Average Number of Individuals Affected',
+                      xaxis_tickfont=dict(size=11))
+    fig.update_traces(opacity=0.75)
     fig.show()
 
 
@@ -159,7 +160,7 @@ def region_map_affected(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
         locationmode='USA-states',
         colorscale='Reds',
         zmin=0,
-        zmax=state_counts['Count1'].max() + state_counts['Count2'].max(),
+        zmax=450,
         colorbar_title='Breach Counts'
     ))
     fig.update_layout(

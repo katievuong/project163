@@ -4,15 +4,23 @@ import pandas as pd
 
 
 def average_number_affected(data: pd.DataFrame) -> None:
-    df = data.copy()
-    df['Individuals_Affected'] = df['Individuals_Affected'].astype(float)
-    df = df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
-    # Create a histogram plot
-    fig = px.histogram(df, x='Type_of_Breach', y='Individuals_Affected', color='Type_of_Breach',
-                       title='Average Number of Individuals Affected by Type of Breach')
-    fig.update_layout(xaxis_title='Type of Breach',
-                      yaxis_title='Average Number of Individuals Affected')
-    fig.show()
+   df = data.copy()
+   df['Type_of_Breach'] = df['Type_of_Breach'].apply(lambda x: x.split(', '))
+   df = df.explode('Type_of_Breach')
+   df = df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
+   df['Type_of_Breach'] = df['Type_of_Breach'].astype(str).str.strip()
+   # Create a histogram plot
+   new_df = pd.DataFrame({'Type of Breach': df['Type_of_Breach'].explode(),
+                          'Individuals Affected': df['Individuals_Affected'].repeat(df['Type_of_Breach'].str.len())})
+   fig = px.histogram(new_df, x='Type of Breach', y='Individuals Affected', color='Type of Breach',
+                      title='Average Number of Individuals Affected by Type of Breach')
+   fig.update_layout(xaxis_title='Type of Breach',
+                     yaxis_title='Average Number of Individuals Affected',
+                     xaxis_tickfont=dict(size=11))
+   fig.update_traces(opacity=0.75)
+   fig.show()
+
+
 
 
 
@@ -46,8 +54,8 @@ def region_map_affected(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
 def main():
     df1 = pd.read_csv("breaches.csv")
     df2 = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
+    df3 = pd.read_csv("test.csv")
     average_number_affected(df1)
-    region_map_affected(df1, df2)
 
 
 if __name__ == '__main__':
