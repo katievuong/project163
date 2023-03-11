@@ -8,7 +8,6 @@ import cleanup
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
-pd.options.plotting.backend = "plotly"
 
 
 # research question 1
@@ -63,12 +62,9 @@ def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
 
 # research question 2
 def average_number_affected(data: pd.DataFrame) -> None:
-    df = data.copy()
-    df['Type_of_Breach'] = df['Type_of_Breach'].apply(lambda x: x.split(', '))
-    df = df.explode('Type_of_Breach')
+    df = cleanup.clean_breach_type(data)
     df = df.groupby(
-        'Type_of_Breach')['Individuals_Affected'].mean().reset_index()
-    df['Type_of_Breach'] = df['Type_of_Breach'].astype(str).str.strip()
+            'Type_of_Breach')['Individuals_Affected'].mean().reset_index()
     # Create a histogram plot
     new_df = pd.DataFrame(
         {'Type_of_Breach': df['Type_of_Breach'].explode(),
@@ -86,19 +82,24 @@ def average_number_affected(data: pd.DataFrame) -> None:
 
 
 # research question 3
-def plot_average_response(data: pd.DataFrame) -> None:
+def plot_average_response(dataf: pd.DataFrame) -> None:
     '''
-    Parameter: data - pandas dataframe
+    Parameter: dataf - pandas dataframe
     Outputs a line graph that shows trend in data breach response rate based
-    on the average time passed in months from 2002-2014, returns None
+    on the average time passed in months from 1997-2014 categorized by breach
+    type, returns None
     '''
+    df = cleanup.clean_breach_type(dataf)
     # Line graph
-    average = data.groupby('year')['response_time'].mean()
-    fig = average.plot(template="plotly_white", labels=dict(
-                       index="Year", value="Response Rate (Months)"))
+    average = df.groupby(
+        ['year', 'Type_of_Breach'])['response_time'].mean().reset_index()
+
+    fig = px.line(average, x='year', y='response_time',
+                  color='Type_of_Breach', labels={'year': 'Year',
+                                                  'response_time':
+                                                  'Response Time (Months)'})
     fig.update_layout(
-        title='Average Response Rate From Breach Start Date 2002-2014',
-                     )
+                title='Average Response Rate From Breach Start Date 1997-2014')
     fig.show()
 
 
@@ -206,8 +207,8 @@ def main():
     df2 = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
     plot_breaches_per_year(df1, df2)
     average_number_affected(df1)
-    plot_most_common_entity(df1)
     plot_average_response(cleanup.clean_dates(df1))
+    plot_most_common_entity(df1)
     breach_individual_correlation(df1)
     breach_total_records(df2)
     region_map_affected(df1, df2)

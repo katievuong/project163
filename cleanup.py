@@ -39,6 +39,12 @@ def count_breaches_by_year(data: pd.DataFrame) -> Tuple[int, int]:
 
 # research question 3
 def clean_dates(data: pd.DataFrame) -> pd.DataFrame:
+    '''
+    parameter: data - pandas dataframe
+    Takes data columns "Date_Posted_or_Updated" and "breach_start",
+    calculates time passed between those dates and converts into months.
+    Adds new column, "response_time" to data and returns data.
+    '''
     response_date = []
 
     # 365.25 days accounts for leap years which happen every 4 years,
@@ -60,7 +66,6 @@ def clean_dates(data: pd.DataFrame) -> pd.DataFrame:
 
         # Create relativedelta object to calculate exact time passed
         delta = relativedelta.relativedelta(end, start)
-        print(delta.months + (delta.years * 12) + (delta.days / average_days))
         response_date.append(delta.months + (delta.years * 12) +
                                             (delta.days / average_days))
     data["response_time"] = pd.Series(response_date)
@@ -69,6 +74,12 @@ def clean_dates(data: pd.DataFrame) -> pd.DataFrame:
 
 # research question 4
 def clean_entities(data: pd.DataFrame) -> dict[str, int]:
+    '''
+    parameter: data - pandas dataframe
+    Seperates words in data column "Location_of_Breached_Information", counts
+    up total amount word has appeared in column, returns dict with locations
+    as keys, counts as values.
+    '''
     unique = {}
     breach_info = (data["Location_of_Breached_Information"].str.split(","))
     for i in breach_info:
@@ -101,7 +112,7 @@ def total_individuals_affected(data: pd.DataFrame) -> pd.Series:
 
     Takes dataframe, returns series with total num of individuals
     affected by each type of breach sorted in descending order.
-    Proving results of breach_individual_correlation. 
+    Proving results of breach_individual_correlation.
     '''
     return data.groupby(
                         'Type_of_Breach'
@@ -117,3 +128,17 @@ def total_records_by_breach_type(data: pd.DataFrame) -> pd.Series:
     '''
     return data.groupby('Type of breach')['Total Records'].sum().sort_values(
         ascending=False)
+
+
+def clean_breach_type(data: pd.DataFrame) -> pd.DataFrame:
+    '''
+    parameter: data - pandas dataframe
+    Helper function that takes column 'Type_of_Breach' and applies the same
+    logic as clean_entities, returning a dataframe result to be used in
+    plots.py
+    '''
+    df = data.copy()
+    df['Type_of_Breach'] = df['Type_of_Breach'].apply(lambda x: x.split(', '))
+    df = df.explode('Type_of_Breach')
+    df['Type_of_Breach'] = df['Type_of_Breach'].astype(str).str.strip()
+    return df
