@@ -108,3 +108,12 @@ def total_individuals_affected(data: pd.DataFrame) -> pd.Series:
                         )[
                           'Individuals_Affected'
                           ].sum().sort_values(ascending=False)
+
+
+def total_records_by_breach_type(data: pd.DataFrame) -> pd.Series:
+    '''
+    Takes dataframe, returns series with total num of records
+    for each type of breach sorted in descending order.
+    '''
+    return data.groupby('Type of breach')['Total Records'].sum().sort_values(
+        ascending=False)

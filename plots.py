@@ -167,7 +167,7 @@ def breach_total_records(data: pd.DataFrame) -> None:
 
     # create bar chart
     fig = px.bar(grouped_data, x='Type of breach', y='Total Records',
-                 title='Total Records for Each Breach Type',
+                 title='PRC Clearinghouse Records Per Breach Type',
                  color='Type of breach')
     fig.update_layout(xaxis_title='Type of Breach',
                       yaxis_title='Total Records')
@@ -209,8 +209,8 @@ def main():
     plot_most_common_entity(df1)
     plot_average_response(cleanup.clean_dates(df1))
     breach_individual_correlation(df1)
-    region_map_affected(df1, df2)
     breach_total_records(df2)
+    region_map_affected(df1, df2)
 
 
 if __name__ == '__main__':

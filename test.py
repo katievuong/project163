@@ -93,14 +93,33 @@ def test_total_individuals_affected(data: pd.DataFrame) -> None:
     assert total_affected['Theft'] > total_affected['Other']
 
 
+def test_total_records_by_breach_type(data: pd.DataFrame) -> None:
+    '''
+    Tests total_records_by_breach_type method by proving that 'HACK'
+    has the most amount of records. This method compares 'HACK'
+    to other breach types.
+    '''
+    total_records = cleanup.total_records_by_breach_type(data)
+    # test 1
+    assert total_records[
+        'HACK'
+    ] > total_records['DISC']
+    # test 2
+    assert total_records[
+        'HACK'
+    ] > total_records['PORT']
+
+
 def main():
     test_data = pd.read_csv("test.csv")
+    prc_data = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
     test_unique_loc(test_data)
     test_average_response(test_data)
     test_filter_by_year(test_data)
     test_split_by_comma(test_data)
     test_total_individuals_affected(test_data)
     test_breach_trend(test_data)
+    test_total_records_by_breach_type(prc_data)
 
 
 if __name__ == '__main__':
