@@ -148,6 +148,32 @@ def breach_individual_correlation(data: pd.DataFrame) -> None:
     fig.show()
 
 
+def breach_total_records(data: pd.DataFrame) -> None:
+    '''
+
+    Takes in PRC dataframe and uses plotly to create a bar graph
+    showing the total number of records for each type of breach.
+    '''
+    # remove commas from Total Records column
+    data['Total Records'] = data['Total Records'].str.replace(',', '')
+
+    # convert Total Records to integers
+    data['Total Records'] = pd.to_numeric(data['Total Records'])
+
+    # group by Type of breach and sum Total Records
+    grouped_data = data.groupby(
+        'Type of breach'
+    )['Total Records'].sum().reset_index()
+
+    # create bar chart
+    fig = px.bar(grouped_data, x='Type of breach', y='Total Records',
+                 title='Total Records for Each Breach Type',
+                 color='Type of breach')
+    fig.update_layout(xaxis_title='Type of Breach',
+                      yaxis_title='Total Records')
+    fig.show()
+
+
 # research question 6
 def region_map_affected(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
     # Count breaches by state in dataset 1 and 2
@@ -184,6 +210,7 @@ def main():
     plot_average_response(cleanup.clean_dates(df1))
     breach_individual_correlation(df1)
     region_map_affected(df1, df2)
+    breach_total_records(df2)
 
 
 if __name__ == '__main__':
