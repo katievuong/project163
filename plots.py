@@ -143,7 +143,8 @@ def breach_individual_correlation(data: pd.DataFrame) -> None:
 
     # create a bar chart
     fig = px.bar(df, x='Type_of_Breach', y='Count', color='Type_of_Breach',
-                 title='Number of Individuals Affected by Type of Breach')
+                 title='Total Number of Individuals Affected by Type of Breach'
+                 )
     fig.update_layout(xaxis_title='Type of Breach',
                       yaxis_title='Number of Individuals Affected')
     fig.show()
