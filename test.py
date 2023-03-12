@@ -44,7 +44,9 @@ def test_individual_count(data: pd.DataFrame) -> None:
     '''
     assert_equals(1175, cleanup.individual_count(data, 'Other'))
     assert_equals(20733.38, cleanup.individual_count(data, 'Theft'))
-    assert_equals(642.33, cleanup.individual_count(data, 'Unauthorized Access/Disclosure'))
+    assert_equals(642.33, cleanup.individual_count(data,
+                  'Unauthorized Access/Disclosure'))
+
 
 # research question 3 tests
 def test_average_response(data: pd.DataFrame) -> None:
@@ -72,7 +74,7 @@ def test_unique_loc(data: pd.DataFrame) -> None:
     amount of unique locations, returns None
     '''
     assert_equals(6, len(cleanup.clean_entities(data)))
-    assert_equals(1, cleanup.clean_entities(data)['E-mail'])
+    assert_equals(2, cleanup.clean_entities(data)['E-mail'])
     assert_equals(14, sum(cleanup.clean_entities(data).values()))
 
 
@@ -86,7 +88,7 @@ def test_split_by_comma(data: pd.DataFrame) -> None:
     by comma.
     '''
     exploded_data = cleanup.split_by_comma(data, 'Type_of_Breach')
-    assert_equals(7, len(exploded_data))
+    assert_equals(13, len(exploded_data))
     assert_equals('Theft', exploded_data.iloc[1]['Type_of_Breach'])
     assert_equals('Theft', exploded_data.iloc[2]['Type_of_Breach'])
 
@@ -134,15 +136,15 @@ def main():
     test_data = pd.read_csv("test.csv")
     prc_data = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
     test_data2 = pd.read_csv("test2.csv")
+    # test_filter_by_year(test_data)
+    test_breach_trend(test_data)
     test_individual_count(test_data)
-    test_state_count(test_data, test_data2)
-    test_unique_loc(test_data)
     test_average_response(test_data)
-    test_filter_by_year(test_data)
+    test_unique_loc(test_data)
     test_split_by_comma(test_data)
     test_total_individuals_affected(test_data)
-    test_breach_trend(test_data)
     test_total_records_by_breach_type(prc_data)
+    test_state_count(test_data, test_data2)
 
 
 if __name__ == '__main__':

@@ -132,16 +132,12 @@ def breach_individual_correlation(data: pd.DataFrame) -> None:
     affected by each type of breach. Uses plotly.
     Returns none.
     '''
-    # split the categories that are combined with a comma
-    data['Type_of_Breach'] = data['Type_of_Breach'].str.split(', ')
+    data = cleanup.clean_breach_type(data)
 
     # create a new data frame with one row for each type of breach
-    df = pd.DataFrame(data['Type_of_Breach'].explode().value_counts())
+    df = pd.DataFrame(data['Type_of_Breach'].value_counts())
     df.reset_index(inplace=True)
     df.columns = ['Type_of_Breach', 'Count']
-
-    # remove leading/trailing whitespaces from the breach types
-    df['Type_of_Breach'] = df['Type_of_Breach'].astype(str).str.strip()
 
     # create a bar chart
     fig = px.bar(df, x='Type_of_Breach', y='Count', color='Type_of_Breach',
