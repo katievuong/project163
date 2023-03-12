@@ -62,22 +62,24 @@ def plot_breaches_per_year(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
 
 # research question 2
 def average_number_affected(data: pd.DataFrame) -> None:
-    df = cleanup.clean_breach_type(data)
-    df = df.groupby(
-            'Type_of_Breach')['Individuals_Affected'].mean().reset_index()
-    # Create a histogram plot
-    new_df = pd.DataFrame(
-        {'Type_of_Breach': df['Type_of_Breach'].explode(),
-         'Individuals_Affected':
-         (df['Individuals_Affected'].repeat(df['Type_of_Breach'].str.len()))})
-    fig = px.histogram(
-        new_df, x='Type_of_Breach', y='Individuals_Affected',
-        color='Type_of_Breach',
-        title='Average Number of Individuals Affected by Type of Breach')
+    '''
+    Takes in a dataframe and create a histagram that represent
+    the average number of people who got affected by each type
+    of the data breach. If there are multiply types for the same breach,
+    it will consider the individuals to add on to all of the types of breah
+    for that breach.
+    '''
+    df = data.copy()
+    df['Type_of_Breach'] = df['Type_of_Breach'].str.split(', ')
+    new_df = pd.DataFrame({'Type_of_Breach': df['Type_of_Breach'].explode(),
+                           'Individuals_Affected': df['Individuals_Affected'].repeat(df['Type_of_Breach'].str.len())})
+    new_df['Type_of_Breach'] = new_df['Type_of_Breach'].astype(str).str.strip()
+    new_df = new_df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
+    fig = px.histogram(new_df, x='Type_of_Breach', y='Individuals_Affected', color='Type_of_Breach',
+                       title='Average Number of Individuals Affected by Type of Breach')
     fig.update_layout(xaxis_title='Type of Breach',
                       yaxis_title='Average Number of Individuals Affected',
                       xaxis_tickfont=dict(size=11))
-    fig.update_traces(opacity=0.75)
     fig.show()
 
 
@@ -178,24 +180,26 @@ def breach_total_records(data: pd.DataFrame) -> None:
 
 # research question 6
 def region_map_affected(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
-    # Count breaches by state in dataset 1 and 2
+    '''
+    Takes in two dataframe and plot a map of United States that shows the
+    describution of the data breach by states based on the data.
+    '''
     state_counts1 = data1['State'].value_counts().reset_index()
     state_counts1.columns = ['State', 'Count1']
     state_counts2 = data2['State'].value_counts().reset_index()
     state_counts2.columns = ['State', 'Count2']
-    # Merge the two counts into a single dataframe
     state_counts = state_counts1.merge(state_counts2, on='State', how='outer')
-    state_counts.fillna(0, inplace=True)
-    # Create a choropleth map of the state-wise breach counts
+    state_counts['Total Count'] = state_counts['Count1'].fillna(0) + state_counts['Count2'].fillna(0)
+    state_counts.drop(columns=['Count1', 'Count2'], inplace=True)
     fig = go.Figure(data=go.Choropleth(
-        locations=state_counts['State'],
-        z=state_counts['Count1'] + state_counts['Count2'],
-        locationmode='USA-states',
-        colorscale='Reds',
-        zmin=0,
-        zmax=450,
-        colorbar_title='Breach Counts'
-    ))
+                    locations=state_counts['State'],
+                    z=state_counts['Total Count'],
+                    locationmode='USA-states',
+                    colorscale='Reds',
+                    zmin=0,
+                    zmax=450,
+                    colorbar_title='Breach Counts'
+                    ))
     fig.update_layout(
         title_text='State-wise Breach Counts',
         geo_scope='usa',

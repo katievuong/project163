@@ -25,7 +25,6 @@ def test_filter_by_year(data: pd.DataFrame) -> None:
 
 def test_breach_trend(data: pd.DataFrame) -> None:
     '''
-
     Tests that breach trend is increasing by using
     count_breach_by_year to check number of breaches
     in latest year (2013) > breaches in earliest year
@@ -36,6 +35,16 @@ def test_breach_trend(data: pd.DataFrame) -> None:
     assert earliest == 1
     assert latest == 2
 
+
+# research question 2 tests
+def test_individual_count(data: pd.DataFrame) -> None:
+    '''
+    Test the avereage individual counts by types.
+    The avereage number are rounded for testing.
+    '''
+    assert_equals(1175, cleanup.individual_count(data, 'Other'))
+    assert_equals(20733.38, cleanup.individual_count(data, 'Theft'))
+    assert_equals(642.33, cleanup.individual_count(data, 'Unauthorized Access/Disclosure'))
 
 # research question 3 tests
 def test_average_response(data: pd.DataFrame) -> None:
@@ -64,7 +73,7 @@ def test_unique_loc(data: pd.DataFrame) -> None:
     '''
     assert_equals(6, len(cleanup.clean_entities(data)))
     assert_equals(1, cleanup.clean_entities(data)['E-mail'])
-    assert_equals(9, sum(cleanup.clean_entities(data).values()))
+    assert_equals(14, sum(cleanup.clean_entities(data).values()))
 
 
 # research question 5 tests
@@ -110,9 +119,23 @@ def test_total_records_by_breach_type(data: pd.DataFrame) -> None:
     ] > total_records['PORT']
 
 
+# researh question 6 test
+def test_state_count(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
+    '''
+    Test state_count method to check if it is able to detect the total
+    amount of a specific state appeared in the data.
+    '''
+    assert_equals(5, cleanup.state_count(data1, data2, 'CA'))
+    assert_equals(4, cleanup.state_count(data2, data1, 'GA'))
+    assert_equals(4, cleanup.state_count(data1, data2, 'NY'))
+
+
 def main():
     test_data = pd.read_csv("test.csv")
     prc_data = pd.read_csv("PRC Data Breach Chronology - 1.13.20.csv")
+    test_data2 = pd.read_csv("test2.csv")
+    test_individual_count(test_data)
+    test_state_count(test_data, test_data2)
     test_unique_loc(test_data)
     test_average_response(test_data)
     test_filter_by_year(test_data)

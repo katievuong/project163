@@ -37,6 +37,24 @@ def count_breaches_by_year(data: pd.DataFrame) -> Tuple[int, int]:
     return (breaches_in_earliest_year, breaches_in_latest_year)
 
 
+# research question 2
+def individual_count(data: pd.DataFrame, type: str) -> float:
+    '''
+    Takes in a dataframe and a str named type, returns that avereage 
+    amount of the individuals affected in that types of breach. If 
+    there are multiply types for the same breach, it will consider the
+    individuals to add on to all of the types of breah for that breach.
+    '''
+    df = data.copy()
+    df['Type_of_Breach'] = df['Type_of_Breach'].str.split(', ')
+    new_df = pd.DataFrame({'Type_of_Breach': df['Type_of_Breach'].explode(),
+                           'Individuals_Affected': df['Individuals_Affected'].repeat(df['Type_of_Breach'].str.len())})
+    new_df['Type_of_Breach'] = new_df['Type_of_Breach'].astype(str).str.strip()
+    new_df = new_df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
+    target = new_df[new_df['Type_of_Breach'] == type]
+    round_target = round(target['Individuals_Affected'].values[0], 2)
+    return round_target
+
 # research question 3
 def clean_dates(data: pd.DataFrame) -> pd.DataFrame:
     '''
@@ -142,3 +160,20 @@ def clean_breach_type(data: pd.DataFrame) -> pd.DataFrame:
     df = df.explode('Type_of_Breach')
     df['Type_of_Breach'] = df['Type_of_Breach'].astype(str).str.strip()
     return df
+
+
+# research question 6
+def state_count(data1: pd.DataFrame, data2:pd.DataFrame, name: str) -> float:
+    '''
+    Takes in two dataframe and the name of a state, returns the total amount
+    of that state appeared in both of the data.
+    '''
+    state_counts1 = data1['State'].value_counts().reset_index()
+    state_counts1.columns = ['State', 'Count1']
+    state_counts2 = data2['State'].value_counts().reset_index()
+    state_counts2.columns = ['State', 'Count2']
+    state_counts = state_counts1.merge(state_counts2, on='State', how='outer')
+    state_counts['Total Count'] = state_counts['Count1'].fillna(0) + state_counts['Count2'].fillna(0)
+    state_counts.drop(columns=['Count1', 'Count2'], inplace=True)
+    target = state_counts[state_counts['State'] == name]
+    return target['Total Count'].values 
