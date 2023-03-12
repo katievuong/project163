@@ -1,7 +1,8 @@
 '''
 Tyrell Garza, Kevin Fu, Katie Vuong
 Data Breach Analysis: Investigating Trends and Impact on Businesses
-
+Seperate file for data cleaning and organizing to be of use when
+imported in plots.py as well as test.py
 '''
 import pandas as pd
 from datetime import datetime
