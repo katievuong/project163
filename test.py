@@ -83,7 +83,7 @@ def test_split_by_comma(data: pd.DataFrame) -> None:
     '''
 
     Tests the split_by_comma function. Returns a
-    dataframe with 7 rows, where 'Type of Breach'
+    dataframe with 13 rows, where 'Type of Breach'
     column contains correct values after splitting
     by comma.
     '''
