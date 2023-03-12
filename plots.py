@@ -72,11 +72,18 @@ def average_number_affected(data: pd.DataFrame) -> None:
     df = data.copy()
     df['Type_of_Breach'] = df['Type_of_Breach'].str.split(', ')
     new_df = pd.DataFrame({'Type_of_Breach': df['Type_of_Breach'].explode(),
-                           'Individuals_Affected': df['Individuals_Affected'].repeat(df['Type_of_Breach'].str.len())})
+                           'Individuals_Affected':
+                           df['Individuals_Affected'].repeat(df[
+                              'Type_of_Breach'].str.len())})
     new_df['Type_of_Breach'] = new_df['Type_of_Breach'].astype(str).str.strip()
-    new_df = new_df.groupby('Type_of_Breach')['Individuals_Affected'].mean().reset_index()
-    fig = px.histogram(new_df, x='Type_of_Breach', y='Individuals_Affected', color='Type_of_Breach',
-                       title='Average Number of Individuals Affected by Type of Breach')
+    new_df = (new_df.groupby('Type_of_Breach')
+              ['Individuals_Affected'].mean().reset_index())
+    fig = px.histogram(
+        new_df, x='Type_of_Breach', y='Individuals_Affected',
+        color='Type_of_Breach',
+        title=(
+               'Average Number of Individuals Affected by Type of Breach')
+                       )
     fig.update_layout(xaxis_title='Type of Breach',
                       yaxis_title='Average Number of Individuals Affected',
                       xaxis_tickfont=dict(size=11))
@@ -112,8 +119,8 @@ def plot_most_common_entity(data: pd.DataFrame) -> None:
     Outputs a pie chart that displays different locations of breached
     information and the counts with a legend, returns None
     '''
-    # Pie chart
     entity_dict = cleanup.clean_entities(data)
+    # Pie chart
     x_y = {'Type': entity_dict.keys(),
            'Values': entity_dict.values()}
     fig = px.pie(x_y, values='Values', names='Type',
@@ -185,7 +192,8 @@ def region_map_affected(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
     state_counts2 = data2['State'].value_counts().reset_index()
     state_counts2.columns = ['State', 'Count2']
     state_counts = state_counts1.merge(state_counts2, on='State', how='outer')
-    state_counts['Total Count'] = state_counts['Count1'].fillna(0) + state_counts['Count2'].fillna(0)
+    state_counts['Total Count'] = (state_counts['Count1'].fillna(0) +
+                                   state_counts['Count2'].fillna(0))
     state_counts.drop(columns=['Count1', 'Count2'], inplace=True)
     fig = go.Figure(data=go.Choropleth(
                     locations=state_counts['State'],

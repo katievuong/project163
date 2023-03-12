@@ -13,7 +13,7 @@ from cse163_utils import assert_equals
 # research question 1 tests
 def test_filter_by_year(data: pd.DataFrame) -> None:
     '''
-
+    Parameter: data - pandas dataframe
     Tests filter_by_year, returns dataframe with 7 rows,
     year ranges from 2009 to 2017.
     '''
@@ -25,6 +25,7 @@ def test_filter_by_year(data: pd.DataFrame) -> None:
 
 def test_breach_trend(data: pd.DataFrame) -> None:
     '''
+    Parameter: data - pandas dataframe
     Tests that breach trend is increasing by using
     count_breach_by_year to check number of breaches
     in latest year (2013) > breaches in earliest year
@@ -39,6 +40,7 @@ def test_breach_trend(data: pd.DataFrame) -> None:
 # research question 2 tests
 def test_individual_count(data: pd.DataFrame) -> None:
     '''
+    Parameter: data - pandas dataframe
     Test the avereage individual counts by types.
     The avereage number are rounded for testing.
     '''
@@ -51,6 +53,7 @@ def test_individual_count(data: pd.DataFrame) -> None:
 # research question 3 tests
 def test_average_response(data: pd.DataFrame) -> None:
     '''
+    Parameter: data - pandas dataframe
     Tests cleanup.py's clean_dates function, ensures correct
     time passed between two dates calculations, returns None
     '''
@@ -70,6 +73,7 @@ def test_average_response(data: pd.DataFrame) -> None:
 # research question 4 tests
 def test_unique_loc(data: pd.DataFrame) -> None:
     '''
+    Parameter: data - pandas dataframe
     Tests cleanup.py's clean_entities function, ensures correct
     amount of unique locations, returns None
     '''
@@ -81,7 +85,7 @@ def test_unique_loc(data: pd.DataFrame) -> None:
 # research question 5 tests
 def test_split_by_comma(data: pd.DataFrame) -> None:
     '''
-
+    Parameter: data - pandas dataframe
     Tests the split_by_comma function. Returns a
     dataframe with 13 rows, where 'Type of Breach'
     column contains correct values after splitting
@@ -95,7 +99,7 @@ def test_split_by_comma(data: pd.DataFrame) -> None:
 
 def test_total_individuals_affected(data: pd.DataFrame) -> None:
     '''
-
+    Parameter: data - pandas dataframe
     Tests total_individuals_affected method by proving
     what visual showed (Theft affects most indivduals).
     This method compares 'Theft' to other breach methods.
@@ -106,6 +110,7 @@ def test_total_individuals_affected(data: pd.DataFrame) -> None:
 
 def test_total_records_by_breach_type(data: pd.DataFrame) -> None:
     '''
+    Parameter: data - pandas dataframe
     Tests total_records_by_breach_type method by proving that 'HACK'
     has the most amount of records. This method compares 'HACK'
     to other breach types.
@@ -124,6 +129,7 @@ def test_total_records_by_breach_type(data: pd.DataFrame) -> None:
 # researh question 6 test
 def test_state_count(data1: pd.DataFrame, data2: pd.DataFrame) -> None:
     '''
+    Parameter: data1 - pandas dataframe, data2 - pandas dataframe
     Test state_count method to check if it is able to detect the total
     amount of a specific state appeared in the data.
     '''
