@@ -46,10 +46,13 @@ def individual_count(data: pd.DataFrame, type: str) -> float:
     there are multiply types for the same breach, it will consider the
     individuals to add on to all of the types of breah for that breach.
     '''
-    data = clean_breach_type(data)
-    new_df = pd.DataFrame({'Individuals_Affected':
-                           data['Individuals_Affected'].repeat(
-                                data['Type_of_Breach'].str.len())})
+    df = data.copy()
+    df['Type_of_Breach'] = df['Type_of_Breach'].str.split(', ')
+    new_df = pd.DataFrame({'Type_of_Breach': df['Type_of_Breach'].explode(),
+                           'Individuals_Affected':
+                           df['Individuals_Affected'].repeat(
+                           df['Type_of_Breach'].str.len())})
+    new_df['Type_of_Breach'] = new_df['Type_of_Breach'].astype(str).str.strip()
     new_df = (new_df.groupby('Type_of_Breach')
               ['Individuals_Affected'].mean().reset_index())
     target = new_df[new_df['Type_of_Breach'] == type]
