@@ -1,9 +1,12 @@
 '''
 Tyrell Garza, Kevin Fu, Katie Vuong
+
+CSE 163
+
 Data Breach Analysis: Investigating Trends and Impact on Businesses
 Testing file imports cleanup.py and cse163_utils.py
 for validating accuracy in results and calculations
-drawing from test.py's smaller data
+drawing from test.py's smaller data.
 '''
 import cleanup
 import pandas as pd

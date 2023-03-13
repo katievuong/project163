@@ -1,5 +1,8 @@
 '''
 Tyrell Garza, Kevin Fu, Katie Vuong
+
+CSE 163
+
 Data Breach Analysis: Investigating Trends and Impact on Businesses
 Seperate file for data cleaning and organizing to be of use when
 imported in plots.py as well as test.py

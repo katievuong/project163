@@ -1,6 +1,10 @@
 '''
 Tyrell Garza, Kevin Fu, Katie Vuong
+
+CSE 163
+
 Data Breach Analysis: Investigating Trends and Impact on Businesses
+
 Plotting file for outputting data visualizations drawing from both
 breaches.csv and PRC Data Breach Chronology - 1.13.20.csv
 '''
